@@ -1,0 +1,36 @@
+/* src/components/TaskList.css */
+.task-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .task-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-card h3 {
+    margin-top: 0;
+  }
+  
+  .task-card p {
+    margin: 5px 0;
+  }
+  
+  .task-card button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .task-card button:hover {
+    background-color: #ddd;
+  }
+  
