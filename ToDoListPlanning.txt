@@ -1,0 +1,141 @@
+Registration Page
+Components: RegistrationForm
+State: username, email, password, confirmPassword
+Handlers:
+handleInputChange
+handleFormSubmit
+validateInputs
+Logic:
+On form submit, validate inputs.
+If valid, create a new user in the database.
+Redirect to login page on success.
+UI:
+Input fields for username, email, password, confirmPassword.
+Submit button.
+Login Page
+Components: LoginForm
+State: email, password, isAuthenticated
+Handlers:
+handleInputChange
+handleFormSubmit
+Logic:
+On form submit, validate credentials.
+If valid, set isAuthenticated to true and redirect to HomePage.
+UI:
+Input fields for email, password.
+Submit button.
+Home Page (Guarded Route)
+Components: TaskList, TaskForm, FilterOptions
+State: tasks, filterCriteria, isAuthenticated
+Handlers:
+handleTaskAdd
+handleTaskUpdate
+handleTaskDelete
+handleTaskComplete
+handleFilterChange
+Logic:
+Fetch tasks from the database on component mount.
+Render tasks based on filterCriteria.
+Only accessible if isAuthenticated is true.
+UI:
+Display list of tasks.
+Form to add/update tasks.
+Filters for task priority, due date, status.
+Profile Page
+Components: UserProfileForm
+State: userProfile
+Handlers:
+handleInputChange
+handleFormSubmit
+Logic:
+Fetch user profile data on component mount.
+On form submit, update user profile in the database.
+UI:
+Input fields for user profile details.
+Submit button.
+Task Operations
+Add Task
+Components: TaskForm
+State: taskName, taskDefinition, taskPriority, taskDueDate
+Handlers:
+handleInputChange
+handleFormSubmit
+Logic:
+On form submit, add the task to the database.
+Update the tasks state with the new task.
+UI:
+Input fields for task details.
+Submit button.
+Update Task
+Components: TaskListItem, TaskForm
+State: selectedTask
+Handlers:
+handleTaskEdit
+handleFormSubmit
+Logic:
+On edit button click, populate TaskForm with task details.
+On form submit, update the task in the database.
+Update the tasks state with the updated task.
+UI:
+Edit button on each task item.
+Pre-filled form with task details.
+Delete Task
+Components: TaskListItem
+Handlers:
+handleTaskDelete
+Logic:
+On delete button click, remove the task from the database.
+Update the tasks state to exclude the deleted task.
+UI:
+Delete button on each task item.
+Complete Task
+Components: TaskListItem
+Handlers:
+handleTaskComplete
+Logic:
+On complete button click, move the task to the completed tasks list in the database.
+Update the tasks state to exclude the completed task.
+UI:
+Complete button on each task item.
+Filtering Tasks
+Components: FilterOptions
+State: filterCriteria
+Handlers:
+handleFilterChange
+Logic:
+On filter change, update filterCriteria state.
+Render tasks based on updated filterCriteria.
+UI:
+Dropdowns or checkboxes for priority, due date, status.
+Navigation
+Components: NavigationBar
+Handlers:
+handleNavigation
+Logic:
+Use React Router for navigation between pages.
+Guard HomePage route to only allow access if isAuthenticated is true.
+UI:
+Links for Registration, Login, Home, Profile, Completed Tasks pages.
+Additional Features
+Due Date Warning
+Logic:
+On login, check for overdue tasks.
+Show warning if there are overdue tasks.
+UI:
+Warning message displayed on HomePage.
+Completed Tasks Page
+Components: CompletedTasksList
+State: completedTasks
+Handlers:
+handleFetchCompletedTasks
+Logic:
+Fetch completed tasks from the database on component mount.
+Display list of completed tasks with completion dates.
+UI:
+List of completed tasks.
+Search from URL
+Logic:
+Parse search query from URL.
+Filter tasks based on search query.
+UI:
+URL-based search functionality.

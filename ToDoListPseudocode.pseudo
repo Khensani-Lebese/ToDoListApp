@@ -1,0 +1,263 @@
+Registration HomePage
+
+Component: RegistrationForm
+State: username, email, password, confirmPassword
+
+Handlers:
+  handleInputChange(event):
+    setState({ [event.target.name]: event.target.value })
+
+  handleFormSubmit(event):
+    event.preventDefault()
+    if validateInputs():
+      createUser(username, email, password)
+      redirectTo(LoginPage)
+
+  validateInputs():
+    if username, email, password, confirmPassword are valid:
+      return true
+    else:
+      showError("Invalid inputs")
+      return false
+
+UI:
+  Form:
+    Input: username
+    Input: email
+    Input: password
+    Input: confirmPassword
+    Button: Submit
+
+LoginPage
+
+Component: LoginForm
+State: email, password, isAuthenticated
+
+Handlers:
+  handleInputChange(event):
+    setState({ [event.target.name]: event.target.value })
+
+  handleFormSubmit(event):
+    event.preventDefault()
+    if validateCredentials(email, password):
+      setState({ isAuthenticated: true })
+      redirectTo(HomePage)
+    else:
+      showError("Invalid credentials")
+
+UI:
+  Form:
+    Input: email
+    Input: password
+    Button: Submit
+
+HomePage (GUARDED ROUTE)
+
+Component: HomePage
+State: tasks, filterCriteria, isAuthenticated
+
+Handlers:
+  handleTaskAdd(task):
+    addTaskToDatabase(task)
+    updateState({ tasks: [...tasks, task] })
+
+  handleTaskUpdate(updatedTask):
+    updateTaskInDatabase(updatedTask)
+    updateState({ tasks: tasks.map(task => task.id === updatedTask.id ? updatedTask : task) })
+
+  handleTaskDelete(taskId):
+    deleteTaskFromDatabase(taskId)
+    updateState({ tasks: tasks.filter(task => task.id !== taskId) })
+
+  handleTaskComplete(taskId):
+    markTaskAsComplete(taskId)
+    updateState({ tasks: tasks.filter(task => task.id !== taskId) })
+
+  handleFilterChange(newCriteria):
+    setState({ filterCriteria: newCriteria })
+
+Logic:
+  onComponentMount():
+    if not isAuthenticated:
+      redirectTo(LoginPage)
+    else:
+      fetchTasksFromDatabase()
+
+UI:
+  TaskList:
+    FilteredTasks = filter(tasks, filterCriteria)
+    For each task in FilteredTasks:
+      TaskItem(task)
+
+  TaskForm:
+    handleTaskAdd
+
+  FilterOptions:
+    handleFilterChange
+
+Profile HomePage
+
+Component: ProfilePage
+State: userProfile
+
+Handlers:
+  handleInputChange(event):
+    setState({ [event.target.name]: event.target.value })
+
+  handleFormSubmit(event):
+    event.preventDefault()
+    updateUserProfileInDatabase(userProfile)
+
+Logic:
+  onComponentMount():
+    fetchUserProfileFromDatabase()
+
+UI:
+  Form:
+    Input: userProfile.username
+    Input: userProfile.email
+    Button: Submit
+
+Task Operations
+Add Task
+
+Component: TaskForm
+State: taskName, taskDefinition, taskPriority, taskDueDate
+
+Handlers:
+  handleInputChange(event):
+    setState({ [event.target.name]: event.target.value })
+
+  handleFormSubmit(event):
+    event.preventDefault()
+    task = { taskName, taskDefinition, taskPriority, taskDueDate }
+    handleTaskAdd(task)
+
+UI:
+  Form:
+    Input: taskName
+    Input: taskDefinition
+    Input: taskPriority
+    Input: taskDueDate
+    Button: Submit
+
+updateTask
+
+Component: TaskListItem
+State: selectedTask
+
+Handlers:
+  handleTaskEdit(task):
+    setState({ selectedTask: task })
+
+  handleFormSubmit(event):
+    event.preventDefault()
+    handleTaskUpdate(selectedTask)
+
+UI:
+  For each task in tasks:
+    TaskItem(task):
+      EditButton(onClick: handleTaskEdit)
+      If selectedTask.id === task.id:
+        TaskForm(selectedTask)
+
+DeleteTask
+
+Component: TaskListItem
+
+Handlers:
+  handleTaskDelete(taskId):
+    deleteTaskFromDatabase(taskId)
+    updateState({ tasks: tasks.filter(task => task.id !== taskId) })
+
+UI:
+  For each task in tasks:
+    TaskItem(task):
+      DeleteButton(onClick: handleTaskDelete)
+
+Complete Task
+
+Component: TaskListItem
+
+Handlers:
+  handleTaskComplete(taskId):
+    markTaskAsComplete(taskId)
+    updateState({ tasks: tasks.filter(task => task.id !== taskId) })
+
+UI:
+  For each task in tasks:
+    TaskItem(task):
+      CompleteButton(onClick: handleTaskComplete)
+
+Filter tasks
+
+Component: FilterOptions
+State: filterCriteria
+
+Handlers:
+  handleFilterChange(event):
+    setState({ filterCriteria: event.target.value })
+
+UI:
+  Dropdowns or Checkboxes for filterCriteria:
+    Priority
+    Due Date
+    Status
+
+Navigation
+
+Component: NavigationBar
+
+Handlers:
+  handleNavigation(route):
+    redirectTo(route)
+
+Logic:
+  Use React Router for navigation
+
+UI:
+  Links for Registration, Login, Home, Profile, Completed Tasks pages
+
+Additional Features
+
+DueDateWarning
+
+Logic:
+  onLogin():
+    overdueTasks = checkForOverdueTasks()
+    if overdueTasks:
+      showWarning("You have overdue tasks")
+
+UI:
+  Display warning message on HomePage if overdueTasks
+
+completed Tasks page
+
+Component: CompletedTasksPage
+State: completedTasks
+
+Handlers:
+  handleFetchCompletedTasks():
+    fetchCompletedTasksFromDatabase()
+    setState({ completedTasks: fetchedCompletedTasks })
+
+Logic:
+  onComponentMount():
+    handleFetchCompletedTasks()
+
+UI:
+  For each completedTask in completedTasks:
+    CompletedTaskItem(completedTask)
+
+
+Search from URL
+
+Logic:
+  onURLChange():
+    searchQuery = parseSearchQueryFromURL()
+    filterTasksBasedOnSearchQuery(searchQuery)
+
+UI:
+  URL-based search functionality
+
+
