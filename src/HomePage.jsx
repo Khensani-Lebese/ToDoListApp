@@ -1,55 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import TaskForm from './TaskForm.jsx';
 import TaskList from './TaskList.jsx';
 import TaskFilter from './TaskFilter.jsx';
+import { saveTasksToLocalStorage, fetchTasks } from './api.jsx';
+import { useNavigate } from 'react-router-dom';
 
-const HomePage = ({ filterCriteria, setFilterCriteria, handleLogout }) => {
-  const [tasks, setTasks] = useState([]);
+const HomePage = ({ tasks, setTasks, filterCriteria, setFilterCriteria, handleLogout }) => {
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    setTasks(savedTasks);
-  }, []);
+    fetchTasks().then(fetchedTasks => setTasks(fetchedTasks));
+  }, [setTasks]);
+
+  useEffect(() => {
+    saveTasksToLocalStorage(tasks);
+  }, [tasks]);
 
   const addTask = (task) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = [...prevTasks, task];
-      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-      return updatedTasks;
-    });
+    setTasks([...tasks, task]);
   };
 
   const updateTask = (updatedTask) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task));
-      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-      return updatedTasks;
-    });
+    setTasks(tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)));
   };
 
   const deleteTask = (taskId) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = prevTasks.filter((task) => task.id !== taskId);
-      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-      return updatedTasks;
-    });
+    setTasks(tasks.filter((task) => task.id !== taskId));
   };
 
   const completeTask = (taskId) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = prevTasks.map((task) => (task.id === taskId ? { ...task, status: 'Complete' } : task));
-      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-      return updatedTasks;
-    });
+    setTasks(tasks.map((task) => (task.id === taskId ? { ...task, status: 'Complete' } : task)));
+  };
+
+  const handleViewCompletedTasks = () => {
+    navigate('/completed-tasks');
   };
 
   return (
     <div>
       <h1>Home Page</h1>
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={() => navigate('/profile')}>Go to Profile</button>
+      <button onClick={handleViewCompletedTasks}>View Completed Tasks</button>
+      
       <TaskForm addTask={addTask} />
       <TaskFilter filterCriteria={filterCriteria} setFilterCriteria={setFilterCriteria} />
-      <TaskList tasks={tasks} updateTask={updateTask} deleteTask={deleteTask} completeTask={completeTask} />
+      <TaskList tasks={tasks} filterCriteria={filterCriteria} updateTask={updateTask} deleteTask={deleteTask} completeTask={completeTask} />
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
