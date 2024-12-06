@@ -1,54 +1,39 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Login.css';
+import { useNavigate, useLocation } from 'react-router-dom';
+import './LoginPage.css';
 
 const LoginPage = ({ handleLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (username === 'admin' && password === 'admin') {
-      handleLogin(username, password);
-      navigate('/home');
-    } else {
-      setError('Invalid username or password');
-    }
+    await handleLogin(username, password);
+    const { from } = location.state || { from: { pathname: "/home" } };
+    navigate(from);
   };
 
   return (
     <div className="login-container">
+      <h2>Login</h2>
       <form onSubmit={handleSubmit} className="login-form">
-        <h1>Admin Dashboard</h1>
-        <h2>Login</h2>
-        <div>
-          <label>
-            Username:
-            <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Password:
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </label>
-        </div>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Login</button>
-        {error && <p>{error}</p>}
       </form>
     </div>
   );

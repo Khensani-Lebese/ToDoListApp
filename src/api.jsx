@@ -1,51 +1,40 @@
-// api.js
-export const registerUser = async (userData) => {
-    // Mock API request
-    console.log('Registering user:', userData);
-    return Promise.resolve();
-  };
-  
-  export const loginUser = async (credentials) => {
-    // Mock API request
-    console.log('Logging in:', credentials);
-    return Promise.resolve({ token: 'fake-jwt-token', user: { username: credentials.username } });
-  };
-  
-  export const getUserFromLocalStorage = () => {
+// api.jsx
+
+// Get user data from local storage
+export const getUserFromLocalStorage = () => {
     return JSON.parse(localStorage.getItem('user'));
   };
   
+  // Save user data to local storage
   export const saveUserToLocalStorage = (user) => {
     localStorage.setItem('user', JSON.stringify(user));
   };
   
+  // Fetch tasks from local storage
   export const fetchTasks = async () => {
-    // Mock API request
-    console.log('Fetching tasks');
-    return Promise.resolve([]);
+    return JSON.parse(localStorage.getItem('tasks')) || [];
   };
   
-  export const addTask = async (task) => {
-    // Mock API request
-    console.log('Adding task:', task);
-    return Promise.resolve();
+  // Save tasks to local storage
+  export const saveTasksToLocalStorage = (tasks) => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
   };
   
-  export const updateTask = async (task) => {
-    // Mock API request
-    console.log('Updating task:', task);
-    return Promise.resolve();
+  // Register user by saving the user data in local storage
+  export const registerUser = async (user) => {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    users.push(user);
+    localStorage.setItem('users', JSON.stringify(users));
   };
   
-  export const deleteTask = async (taskId) => {
-    // Mock API request
-    console.log('Deleting task:', taskId);
-    return Promise.resolve();
-  };
-  
-  export const markTaskAsCompleted = async (taskId) => {
-    // Mock API request
-    console.log('Marking task as completed:', taskId);
-    return Promise.resolve();
+  // Login user by checking the credentials against the stored users
+  export const loginUser = async ({ username, password }) => {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+      return { user };
+    } else {
+      throw new Error('Invalid credentials');
+    }
   };
   

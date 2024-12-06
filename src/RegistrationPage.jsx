@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from './api';
+import { registerUser } from './api.jsx';
 import './RegistrationPage.css';
 
 const RegistrationPage = () => {
@@ -15,15 +15,42 @@ const RegistrationPage = () => {
     navigate('/login');
   };
 
+  const handleLoginNavigation = () => {
+    navigate('/login');
+  };
+
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+    
+    <div className="register-container">
+      
+      <form onSubmit={handleSubmit} className="register-form">
+        <h1>Register</h1>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Register</button>
+        <p>Registered?</p>
+        <button onClick={handleLoginNavigation} className="login-button">Login</button>
       </form>
+      
     </div>
   );
 };

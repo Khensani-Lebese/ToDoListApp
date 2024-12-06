@@ -6,7 +6,6 @@
   }
   
   .task-card {
-    background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 20px;
@@ -28,9 +27,30 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 7%;
+    color: rgb(179, 0, 255);
   }
   
   .task-card button:hover {
     background-color: #ddd;
+    
   }
   
+  .task-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+  }
+
+  .high-priority {
+    background-color: #ffcccc; /* Red */
+  }
+
+  .medium-priority {
+    background-color: #ffebcc; /* Orange */
+  }
+
+  .low-priority {
+    background-color: #ccffcc; /* Green */
+  }
